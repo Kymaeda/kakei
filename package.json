@@ -12,6 +12,6 @@
   },
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx",
-    "watch": "esbuild app/javascript/*.* --watch --bundle --outdir=app/assets/builds --loader:.js=jsx"
+    "type-check": "tsc --project tsconfig.json --noEmit --watch --preserveWatchOutput"
   }
 }
