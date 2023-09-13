@@ -8,12 +8,14 @@ services:
       - mysqldatavol:/var/lib/mysql
   web:
     build: .
-    command: bash -c "rm -f /kakei/tmp/pids/server.pid && bundle install && bundle exec rails s -b '0.0.0.0'"
+    command: bash -c "rm -f /kakei/tmp/pids/server.pid && bundle install && ./bin/dev"
     volumes:
       - .:/kakei
     ports:
       - "3000:3000"
     depends_on:
       - db
+    stdin_open: true
+    tty: true
 volumes:
   mysqldatavol:
