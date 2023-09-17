@@ -21,7 +21,33 @@ const createData = (data: BudgetRow) => {
   return data;
 };
 
-const rows = [createData({ name: '住居費', kind: '固定費', account: 'みずほ', amount: 87000 })];
+// TODO: サーバからPropsでデータを受け取るように後続コミットで修正予定
+const rows = [
+  createData({
+    name: '住居費',
+    kind: '固定費',
+    account: 'みずほ',
+    amount: 87000,
+  }),
+  createData({
+    name: '食費',
+    kind: '変動費',
+    account: '住信SBI(代表)',
+    amount: 30000,
+  }),
+  createData({
+    name: '交際/趣味',
+    kind: '自己投資',
+    account: '住信SBI(代表)',
+    amount: 10000,
+  }),
+  createData({
+    name: '特別費積立',
+    kind: '貯蓄・投資',
+    account: '住信SBI(目的)',
+    amount: 63000,
+  }),
+];
 
 export const TopContainer = () => (
   <>
@@ -38,13 +64,15 @@ export const TopContainer = () => (
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell>aaaa</TableCell>
-            <TableCell>aaaa</TableCell>
-            <TableCell>aaaa</TableCell>
-            <TableCell>aaaa</TableCell>
-            <TableCell>aaaa</TableCell>
-          </TableRow>
+          {rows.map((row) => (
+            <TableRow>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.kind}</TableCell>
+              <TableCell>{row.account}</TableCell>
+              <TableCell>{row.amount}</TableCell>
+              <TableCell>to be implemented</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
