@@ -9,6 +9,11 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
+  AppBar,
+  Typography,
+  Toolbar,
+  IconButton,
 } from '@mui/material';
 
 type BudgetRow = {
@@ -64,6 +69,29 @@ const rows = [
 
 export const TopContainer = () => (
   <>
+    {/*
+      TODO: 全体のレイアウトに関わる部分は、Layoutコンポーネントのようなものに切り出した方がよさそう
+            Material UIで、ヘッダーやサイドメニューをデザインしたいので、Railsでやらずに、reactでやる
+    */}
+    <Box sx={{ display: 'flex' }}>
+      <AppBar position="absolute">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="open drawer">
+            {/* TODO: 後でアイコンにする */}
+            三
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
+            KAKEI
+          </Typography>
+        </Toolbar>
+      </AppBar>
+    </Box>
     <p>
       予算: <span>{budgetAmount}</span>
     </p>
@@ -96,5 +124,13 @@ export const TopContainer = () => (
         </TableBody>
       </Table>
     </TableContainer>
+
+    {/*
+      TODO: 以下の要素を表示する
+            - 種別ごとの割合（テーブル）
+            - 種別ごとの割合(円グラフ)
+            - 口座ごとの金額
+            - 口座ごとの金額をもとに、自動にゅうきん/振り込み/振替の金額表示
+    */}
   </>
 );
