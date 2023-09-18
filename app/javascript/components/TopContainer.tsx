@@ -33,40 +33,47 @@ const calcPercentage = (amount: number, floorSize: number = 1) => {
   return Math.floor(parts * floorSize * 10) / (floorSize * 10);
 };
 
-// TODO: サーバからPropsでデータを受け取るように後続コミットで修正予定
-const createData = (data: BudgetRow) => {
-  return data;
+// TODO: サーバからProps or APIで受け取る前提でデータの扱いを定義する
+const data = {
+  rows: [
+    {
+      id: 1,
+      name: '住居費',
+      kind: '固定費',
+      account: 'みずほ',
+      amount: 87000,
+    },
+    {
+      id: 2,
+      name: '食費',
+      kind: '変動費',
+      account: '住信SBI(代表)',
+      amount: 30000,
+    },
+    {
+      id: 3,
+      name: '交際/趣味',
+      kind: '自己投資',
+      account: '住信SBI(代表)',
+      amount: 10000,
+    },
+    {
+      id: 4,
+      name: '特別費積立',
+      kind: '貯蓄・投資',
+      account: '住信SBI(目的)',
+      amount: 63000,
+    },
+  ],
 };
-const rows = [
-  createData({
-    id: 1,
-    name: '住居費',
-    kind: '固定費',
-    account: 'みずほ',
-    amount: 87000,
-  }),
-  createData({
-    id: 2,
-    name: '食費',
-    kind: '変動費',
-    account: '住信SBI(代表)',
-    amount: 30000,
-  }),
-  createData({
-    id: 3,
-    name: '交際/趣味',
-    kind: '自己投資',
-    account: '住信SBI(代表)',
-    amount: 10000,
-  }),
-  createData({
-    id: 4,
-    name: '特別費積立',
-    kind: '貯蓄・投資',
-    account: '住信SBI(目的)',
-    amount: 63000,
-  }),
-];
+
+const labels = {
+  name: '項目',
+  kind: '種別',
+  account: '管理口座',
+  amount: '金額',
+  percentage: '割合',
+};
 
 export const TopContainer = () => {
   return (
@@ -82,15 +89,15 @@ export const TopContainer = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>項目</TableCell>
-                  <TableCell>種別</TableCell>
-                  <TableCell>管理口座</TableCell>
-                  <TableCell>金額</TableCell>
-                  <TableCell>割合</TableCell>
+                  <TableCell>{labels.name}</TableCell>
+                  <TableCell>{labels.kind}</TableCell>
+                  <TableCell>{labels.account}</TableCell>
+                  <TableCell>{labels.amount}</TableCell>
+                  <TableCell>{labels.percentage}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {data.rows.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.kind}</TableCell>
