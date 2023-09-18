@@ -1,6 +1,5 @@
-// Hellow Worldと表示する
 import React from 'react';
-import Button from '@mui/material/Button';
+import { Layout } from './Layout';
 import {
   TableContainer,
   Table,
@@ -14,6 +13,8 @@ import {
   Typography,
   Toolbar,
   IconButton,
+  Container,
+  Grid,
 } from '@mui/material';
 
 type BudgetRow = {
@@ -67,70 +68,45 @@ const rows = [
   }),
 ];
 
-export const TopContainer = () => (
-  <>
-    {/*
-      TODO: 全体のレイアウトに関わる部分は、Layoutコンポーネントのようなものに切り出した方がよさそう
-            Material UIで、ヘッダーやサイドメニューをデザインしたいので、Railsでやらずに、reactでやる
-    */}
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="absolute">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="open drawer">
-            {/* TODO: 後でアイコンにする */}
-            三
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
+export const TopContainer = () => {
+  return (
+    <Layout>
+      <Grid container spacing={3}>
+        {/* Budget Detail Table */}
+        <Grid item xs={12} md={8} lg={9}>
+          <TableContainer
+            component={Paper}
+            sx={{ m: 5 }}
+            aria-label="simple table"
           >
-            KAKEI
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
-    <p>
-      予算: <span>{budgetAmount}</span>
-    </p>
-    {/* TODO: MUI-XのDataGridでも良いかも？？ */}
-    <TableContainer
-      component={Paper}
-      sx={{ maxWidth: 970, m: 5 }}
-      aria-label="simple table"
-    >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>項目</TableCell>
-            <TableCell>種別</TableCell>
-            <TableCell>管理口座</TableCell>
-            <TableCell>金額</TableCell>
-            <TableCell>割合</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.kind}</TableCell>
-              <TableCell>{row.account}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell>{calcPercentage(row.amount)}%</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-
-    {/*
-      TODO: 以下の要素を表示する
-            - 種別ごとの割合（テーブル）
-            - 種別ごとの割合(円グラフ)
-            - 口座ごとの金額
-            - 口座ごとの金額をもとに、自動にゅうきん/振り込み/振替の金額表示
-    */}
-  </>
-);
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>項目</TableCell>
+                  <TableCell>種別</TableCell>
+                  <TableCell>管理口座</TableCell>
+                  <TableCell>金額</TableCell>
+                  <TableCell>割合</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.kind}</TableCell>
+                    <TableCell>{row.account}</TableCell>
+                    <TableCell>{row.amount}</TableCell>
+                    <TableCell>{calcPercentage(row.amount)}%</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Grid item xs={12} md={4} lg={3}>
+          {/* ここに円グラフを入れる予定 */}
+        </Grid>
+      </Grid>
+    </Layout>
+  );
+};
