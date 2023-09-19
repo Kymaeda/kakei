@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: budgets
+#
+#  id          :bigint           not null, primary key
+#  amount      :integer          not null
+#  finished_at :datetime         not null
+#  started_at  :datetime         not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe Budget, type: :model do
