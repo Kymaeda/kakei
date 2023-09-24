@@ -10,6 +10,8 @@
 #  updated_at  :datetime         not null
 #
 class Budget < ApplicationRecord
+  has_many :items, class_name: 'BudgetItem'
+
   validates :started_at, presence: true
   validates :finished_at, presence: true
   validates :amount, presence: true
