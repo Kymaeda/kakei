@@ -36,4 +36,18 @@ RSpec.describe ReservedItem, type: :model do
       expect(item).to be_invalid
     end
   end
+
+  describe '#annual_cost' do
+    it '単価 * 年間消費回数の結果を返すこと' do
+      item = build(:reserved_item, unit_cost: 1000, annual_counts: 3)
+      expect(item.annual_cost).to eq 3000
+    end
+  end
+
+  describe '#reserved_amount' do
+    it '年間費用を、積立回数で割った結果を返すこと' do
+      item = build(:reserved_item, unit_cost: 1000, annual_counts: 6)
+      expect(item.reserved_amount).to eq 500
+    end
+  end
 end

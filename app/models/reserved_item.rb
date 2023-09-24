@@ -23,6 +23,8 @@
 #  fk_rails_...  (budget_id => budgets.id)
 #
 class ReservedItem < ApplicationRecord
+  RESERVED_COUNT_PER_YEAR = 12
+
   belongs_to :bank_sub_account
   belongs_to :budget
 
@@ -30,5 +32,14 @@ class ReservedItem < ApplicationRecord
     validates :name
     validates :unit_cost
     validates :annual_counts
+  end
+
+  def annual_cost
+    unit_cost * annual_counts
+  end
+
+  # 毎月の積立額
+  def reserved_amount
+    annual_cost / RESERVED_COUNT_PER_YEAR
   end
 end
