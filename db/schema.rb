@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_24_024646) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_24_031345) do
   create_table "bank_accounts", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -45,7 +45,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_024646) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "reserved_items", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "unit_cost", null: false
+    t.integer "annual_counts", null: false
+    t.text "note"
+    t.bigint "bank_sub_account_id", null: false
+    t.bigint "budget_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bank_sub_account_id"], name: "index_reserved_items_on_bank_sub_account_id"
+    t.index ["budget_id"], name: "index_reserved_items_on_budget_id"
+  end
+
   add_foreign_key "bank_sub_accounts", "bank_accounts"
   add_foreign_key "budget_items", "bank_accounts"
   add_foreign_key "budget_items", "budgets"
+  add_foreign_key "reserved_items", "bank_sub_accounts"
+  add_foreign_key "reserved_items", "budgets"
 end

@@ -30,7 +30,7 @@ RSpec.describe BudgetItem, type: :model do
       expect(item).to be_valid
     end
 
-    it '名前が設定されていない場合、falseを返すこと' do
+    it '必須カラムに値が設定されていない場合、falseを返すこと' do
       item = build(:budget_item, name: nil, kind: nil, amount: nil)
       expect(item).to be_invalid
     end
