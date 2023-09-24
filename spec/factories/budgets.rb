@@ -33,4 +33,22 @@ FactoryBot.define do
       end
     end
   end
+
+  # @example アイテム数を指定する場合
+  #          build(:budget, :with_reserved_items, reserved_item_count)
+  # @example アイテムをオブジェクトで指定する場合
+  #          build(:budget, :with_reserved_items, reserved_items: [item1, item2, item3])
+  # NOTE: reserved_item_countとreserved_itemsの両方を指定した場合は、reserved_itemsが優先される
+  trait :with_reserved_items do
+    transient do
+      reserved_item_count { 1 }
+      reserved_items { [build_list(:reserved_item, reserved_item_count)] }
+    end
+
+    after(:build) do |budget, evalutor|
+      evalutor.reserved_items.each do |item|
+        budget.reserved_items << item
+      end
+    end
+  end
 end
