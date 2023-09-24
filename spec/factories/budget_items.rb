@@ -29,4 +29,20 @@ FactoryBot.define do
     association :bank_account, factory: :bank_account
     association :budget, factory: :budget
   end
+
+  trait :fixed do
+    kind { :fixed }
+  end
+
+  trait :variables do
+    kind { :variables }
+  end
+
+  trait :investments do
+    kind { :investments }
+  end
+
+  trait :savings do
+    kind { :savings }
+  end
 end
