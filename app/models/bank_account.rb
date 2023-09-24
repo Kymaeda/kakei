@@ -8,5 +8,7 @@
 #  updated_at :datetime         not null
 #
 class BankAccount < ApplicationRecord
+  has_many :bank_sub_accounts, dependent: :destroy
+
   validates :name, presence: true
 end
