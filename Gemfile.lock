@@ -88,6 +88,10 @@ GEM
       railties (>= 5.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    graphiql-rails (1.9.0)
+      railties
+      sprockets-rails
+    graphql (2.1.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
@@ -219,6 +223,8 @@ DEPENDENCIES
   bootsnap
   debug
   factory_bot_rails
+  graphiql-rails
+  graphql
   jbuilder
   jsbundling-rails
   mysql2 (~> 0.5)
