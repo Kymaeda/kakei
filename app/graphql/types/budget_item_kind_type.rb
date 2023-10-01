@@ -2,9 +2,8 @@
 
 module Types
   class BudgetItemKindType < Types::BaseEnum
-    value "FIXED", value: "fixed"
-    value "VARIABLE", value: "variable"
-    value "INVESTMENTS", value: "investments"
-    value "SAVING", value: "saving"
+    BudgetItem.kinds.keys.each do |kind|
+      value kind.upcase, value: kind
+    end
   end
 end
