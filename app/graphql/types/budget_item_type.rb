@@ -4,7 +4,7 @@ module Types
   class BudgetItemType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
-    field :kind, Integer, null: false
+    field :kind, Types::BudgetItemKindType, null: false
     field :amount, Integer, null: false
     field :bank_account_id, Integer, null: false
     field :budget, Types::BudgetType, null: false
