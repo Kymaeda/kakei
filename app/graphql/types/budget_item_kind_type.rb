@@ -2,7 +2,7 @@
 
 module Types
   class BudgetItemKindType < Types::BaseEnum
-    BudgetItem.kinds.keys.each do |kind|
+    BudgetItem.kinds.each_key do |kind|
       value kind.upcase, value: kind
     end
   end
