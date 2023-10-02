@@ -33,4 +33,6 @@ class BudgetItem < ApplicationRecord
     validates :kind
     validates :amount
   end
+
+  delegate :name, to: :bank_account, prefix: true
 end
