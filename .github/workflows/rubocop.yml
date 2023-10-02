@@ -1,0 +1,15 @@
+name: RuboCop
+on: [pull_request]
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        # ruby-version: 3.1.1
+        bundle-cache: true
+    - name: Run rubocop
+      run: bundle exec rubocop
