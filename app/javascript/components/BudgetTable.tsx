@@ -92,7 +92,11 @@ export const BudgetTable = () => {
     query: BudgetQuery,
   });
   const { data, fetching, error } = result;
-  console.log(data);
+
+  if (fetching) return <p>Loading...</p>;
+  if (error) return <p>Oh no... {error.message}</p>;
+
+  console.log(data.budget.budgetItems);
 
   return (
     <Grid container spacing={3}>
