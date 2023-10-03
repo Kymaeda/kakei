@@ -1,4 +1,12 @@
 import React from 'react';
+import {
+  Client,
+  Provider,
+  cacheExchange,
+  fetchExchange,
+  gql,
+  useQuery,
+} from 'urql';
 import { Layout } from './Layout';
 import {
   TableContainer,
@@ -75,45 +83,82 @@ const labels = {
   percentage: '割合',
 };
 
-export const TopContainer = () => {
-  return (
-    <Layout>
-      <Grid container spacing={3}>
-        {/* Budget Detail Table */}
-        <Grid item xs={12} md={8} lg={9}>
-          <TableContainer
-            component={Paper}
-            sx={{ m: 5 }}
-            aria-label="simple table"
-          >
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>{labels.name}</TableCell>
-                  <TableCell>{labels.kind}</TableCell>
-                  <TableCell>{labels.account}</TableCell>
-                  <TableCell>{labels.amount}</TableCell>
-                  <TableCell>{labels.percentage}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.rows.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.kind}</TableCell>
-                    <TableCell>{row.account}</TableCell>
-                    <TableCell>{row.amount}</TableCell>
-                    <TableCell>{calcPercentage(row.amount)}%</TableCell>
+  export const TopContainer = () => {
+    const client = new Client({
+      url: 'http://localhost:3000/graphiql',
+      // suspense: true,
+      exchanges: [cacheExchange, fetchExchange],
+    });
+    console.log(client);
+
+    const BudgetQuery = gql`
+      query {
+        budget(id: 1) {
+          id
+          startedAt
+          finishedAt
+          amount
+          budgetItems {
+            id
+            name
+            kind
+            amount
+            bankAccount {
+              id
+              name
+            }
+          }
+        }
+      }
+    `;
+    console.log(BudgetQuery);
+
+    const [result, reexecuteQuery] = useQuery({
+      query: BudgetQuery,
+    });
+    console.log(result);
+
+    return (
+      // NOTE: Providerの子コンポーネント内で、useQueryを呼び出さないとエラーになる
+      <Provider value={client}>
+        {/* <Layout> */}
+        <Grid container spacing={3}>
+          {/* Budget Detail Table */}
+          <Grid item xs={12} md={8} lg={9}>
+            <TableContainer
+              component={Paper}
+              sx={{ m: 5 }}
+              aria-label="simple table"
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{labels.name}</TableCell>
+                    <TableCell>{labels.kind}</TableCell>
+                    <TableCell>{labels.account}</TableCell>
+                    <TableCell>{labels.amount}</TableCell>
+                    <TableCell>{labels.percentage}</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {data.rows.map((row) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>{row.kind}</TableCell>
+                      <TableCell>{row.account}</TableCell>
+                      <TableCell>{row.amount}</TableCell>
+                      <TableCell>{calcPercentage(row.amount)}%</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item xs={12} md={4} lg={3}>
+            {/* ここに円グラフを入れる予定 */}
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={4} lg={3}>
-          {/* ここに円グラフを入れる予定 */}
-        </Grid>
-      </Grid>
-    </Layout>
-  );
-};
+        {/* </Layout> */}
+      </Provider>
+    );
+  };
