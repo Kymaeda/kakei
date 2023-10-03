@@ -18,13 +18,26 @@ const calcPercentage = (amount: number, floorSize: number = 1) => {
 };
 
 // TODO: GraphQLから取得するようにする
+type Budget = {
+  id: number;
+  startedAt: Date;
+  finishedAt: Date;
+  amount: number;
+  budgetItems: BudgetRow[];
+};
 type BudgetRow = {
   id: number;
   name: string;
   kind: string;
   account: string;
   amount: number;
+  bankAccount: BankAccount;
 };
+type BankAccount = {
+  id: number;
+  name: string;
+}
+
 const sampleData = {
   rows: [
     {
@@ -96,7 +109,7 @@ export const BudgetTable = () => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  console.log(data.budget.budgetItems);
+  const budget: Budget = data.budget;
 
   return (
     <Grid container spacing={3}>
@@ -118,13 +131,13 @@ export const BudgetTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sampleData.rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.kind}</TableCell>
-                  <TableCell>{row.account}</TableCell>
-                  <TableCell>{row.amount}</TableCell>
-                  <TableCell>{calcPercentage(row.amount)}%</TableCell>
+              {budget.budgetItems.map((budgetItem) => (
+                <TableRow key={budgetItem.id}>
+                  <TableCell>{budgetItem.name}</TableCell>
+                  <TableCell>{budgetItem.kind}</TableCell>
+                  <TableCell>{budgetItem.bankAccount.name}</TableCell>
+                  <TableCell>{budgetItem.amount}</TableCell>
+                  <TableCell>{calcPercentage(budgetItem.amount)}%</TableCell>
                 </TableRow>
               ))}
             </TableBody>
