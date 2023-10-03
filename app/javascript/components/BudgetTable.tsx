@@ -1,4 +1,5 @@
 import { gql, useQuery } from 'urql';
+import { Budget } from '../types/budget';
 import {
   TableContainer,
   Table,
@@ -16,27 +17,6 @@ const calcPercentage = (amount: number, floorSize: number = 1) => {
   let parts = (amount / budgetAmount) * 100;
   return Math.floor(parts * floorSize * 10) / (floorSize * 10);
 };
-
-// TODO: GraphQLから取得するようにする
-type Budget = {
-  id: number;
-  startedAt: Date;
-  finishedAt: Date;
-  amount: number;
-  budgetItems: BudgetRow[];
-};
-type BudgetRow = {
-  id: number;
-  name: string;
-  kind: string;
-  account: string;
-  amount: number;
-  bankAccount: BankAccount;
-};
-type BankAccount = {
-  id: number;
-  name: string;
-}
 
 const labels = {
   name: '項目',
