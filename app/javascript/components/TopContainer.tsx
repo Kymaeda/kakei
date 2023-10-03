@@ -27,6 +27,7 @@ export const TopContainer = () => {
   return (
     <Provider value={client}>
       <Layout>
+        {/* TODO: Suspenseする */}
         <BudgetTable />
       </Layout>
     </Provider>

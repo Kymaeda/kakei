@@ -38,39 +38,6 @@ type BankAccount = {
   name: string;
 }
 
-const sampleData = {
-  rows: [
-    {
-      id: 1,
-      name: '住居費',
-      kind: '固定費',
-      account: 'みずほ',
-      amount: 87000,
-    },
-    {
-      id: 2,
-      name: '食費',
-      kind: '変動費',
-      account: '住信SBI(代表)',
-      amount: 30000,
-    },
-    {
-      id: 3,
-      name: '交際/趣味',
-      kind: '自己投資',
-      account: '住信SBI(代表)',
-      amount: 10000,
-    },
-    {
-      id: 4,
-      name: '特別費積立',
-      kind: '貯蓄・投資',
-      account: '住信SBI(目的)',
-      amount: 63000,
-    },
-  ],
-};
-
 const labels = {
   name: '項目',
   kind: '種別',
@@ -80,6 +47,7 @@ const labels = {
 };
 
 export const BudgetTable = () => {
+  // TODO: 取得するBudgetデータの指定を動的にする
   const BudgetQuery = gql`
     query {
       budget(id: 1) {
