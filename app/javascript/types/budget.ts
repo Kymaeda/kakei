@@ -3,10 +3,10 @@ type Budget = {
   startedAt: Date;
   finishedAt: Date;
   amount: number;
-  budgetItems: BudgetRow[];
+  budgetItems: BudgetItem[];
 };
 
-type BudgetRow = {
+type BudgetItem = {
   id: number;
   name: string;
   kind: string;
@@ -20,4 +20,4 @@ type BankAccount = {
   name: string;
 };
 
-export type { Budget, BudgetRow, BankAccount };
+export type { Budget, BudgetItem, BankAccount };

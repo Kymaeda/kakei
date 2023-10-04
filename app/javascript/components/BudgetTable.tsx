@@ -1,4 +1,5 @@
 import { gql, useQuery } from 'urql';
+import { calcPercentage } from '../services/budget';
 import { Budget } from '../types/budget';
 import {
   TableContainer,
@@ -10,13 +11,6 @@ import {
   Paper,
   Grid,
 } from '@mui/material';
-
-const budgetAmount = 350000;
-// TODO: serviceに切り出す
-const calcPercentage = (amount: number, floorSize: number = 1) => {
-  let parts = (amount / budgetAmount) * 100;
-  return Math.floor(parts * floorSize * 10) / (floorSize * 10);
-};
 
 const labels = {
   name: '項目',
@@ -101,7 +95,9 @@ export const BudgetTable = () => {
                   <TableCell>{kindName(budgetItem.kind)}</TableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell>{budgetItem.amount}</TableCell>
-                  <TableCell>{calcPercentage(budgetItem.amount)}%</TableCell>
+                  <TableCell>
+                    {calcPercentage(budget.amount, budgetItem.amount)}%
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
