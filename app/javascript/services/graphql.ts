@@ -1,19 +1,13 @@
 import { Client, cacheExchange, fetchExchange } from 'urql';
-
-const metaTag = document.querySelector("meta[name='csrf-token']");
-let token: string;
-
-if (!metaTag) {
-  throw new Error('CSRF token not found: ページを再読み込みしてください');
-} else {
-  token = metaTag.getAttribute('content') || '';
-}
+import { getToken } from './token';
 
 export const client = new Client({
   url: 'http://localhost:3000/graphql',
   // suspense: true,
   exchanges: [cacheExchange, fetchExchange],
+  // HACK: grapql_controllerで、protect_from_forgery with: :null_sessionを設定しているので、不要かもしれない
   fetchOptions: () => {
+    const token = getToken();
     return {
       headers: { authorization: token ? `Bearer ${token}` : '' },
     };
