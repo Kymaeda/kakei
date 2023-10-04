@@ -1,4 +1,6 @@
 import { gql, useQuery } from 'urql';
+import { calcPercentage } from '../services/budget';
+import { Budget } from '../types/budget';
 import {
   TableContainer,
   Table,
@@ -10,63 +12,8 @@ import {
   Grid,
 } from '@mui/material';
 
-const budgetAmount = 350000;
-// TODO: serviceに切り出す
-const calcPercentage = (amount: number, floorSize: number = 1) => {
-  let parts = (amount / budgetAmount) * 100;
-  return Math.floor(parts * floorSize * 10) / (floorSize * 10);
-};
-
-// TODO: GraphQLから取得するようにする
-type BudgetRow = {
-  id: number;
-  name: string;
-  kind: string;
-  account: string;
-  amount: number;
-};
-const sampleData = {
-  rows: [
-    {
-      id: 1,
-      name: '住居費',
-      kind: '固定費',
-      account: 'みずほ',
-      amount: 87000,
-    },
-    {
-      id: 2,
-      name: '食費',
-      kind: '変動費',
-      account: '住信SBI(代表)',
-      amount: 30000,
-    },
-    {
-      id: 3,
-      name: '交際/趣味',
-      kind: '自己投資',
-      account: '住信SBI(代表)',
-      amount: 10000,
-    },
-    {
-      id: 4,
-      name: '特別費積立',
-      kind: '貯蓄・投資',
-      account: '住信SBI(目的)',
-      amount: 63000,
-    },
-  ],
-};
-
-const labels = {
-  name: '項目',
-  kind: '種別',
-  account: '管理口座',
-  amount: '金額',
-  percentage: '割合',
-};
-
 export const BudgetTable = () => {
+  // TODO: 取得するBudgetデータの指定を動的にする
   const BudgetQuery = gql`
     query {
       budget(id: 1) {
@@ -92,7 +39,27 @@ export const BudgetTable = () => {
     query: BudgetQuery,
   });
   const { data, fetching, error } = result;
-  console.log(data);
+
+  if (fetching) return <p>Loading...</p>;
+  if (error) return <p>Oh no... {error.message}</p>;
+
+  const budget: Budget = data.budget;
+
+  // TODO: railsに、enum_help入れて、翻訳された情報を取得する
+  const kindName = (kind: string) => {
+    switch (kind) {
+      case 'FIXED':
+        return '固定費';
+      case 'VARIABLES':
+        return '変動費';
+      case 'INVESTMENTS':
+        return '自己投資';
+      case 'SAVINGS':
+        return '貯蓄・投資';
+      default:
+        return '';
+    }
+  }
 
   return (
     <Grid container spacing={3}>
@@ -106,21 +73,23 @@ export const BudgetTable = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{labels.name}</TableCell>
-                <TableCell>{labels.kind}</TableCell>
-                <TableCell>{labels.account}</TableCell>
-                <TableCell>{labels.amount}</TableCell>
-                <TableCell>{labels.percentage}</TableCell>
+                <TableCell>項目</TableCell>
+                <TableCell>種別</TableCell>
+                <TableCell>銀行口座</TableCell>
+                <TableCell>金額</TableCell>
+                <TableCell>割合</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {sampleData.rows.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.kind}</TableCell>
-                  <TableCell>{row.account}</TableCell>
-                  <TableCell>{row.amount}</TableCell>
-                  <TableCell>{calcPercentage(row.amount)}%</TableCell>
+              {budget.budgetItems.map((budgetItem) => (
+                <TableRow key={budgetItem.id}>
+                  <TableCell>{budgetItem.name}</TableCell>
+                  <TableCell>{kindName(budgetItem.kind)}</TableCell>
+                  <TableCell>{budgetItem.bankAccount.name}</TableCell>
+                  <TableCell>{budgetItem.amount}</TableCell>
+                  <TableCell>
+                    {calcPercentage(budget.amount, budgetItem.amount)}%
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
