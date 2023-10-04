@@ -12,14 +12,6 @@ import {
   Grid,
 } from '@mui/material';
 
-const labels = {
-  name: '項目',
-  kind: '種別',
-  account: '管理口座',
-  amount: '金額',
-  percentage: '割合',
-};
-
 export const BudgetTable = () => {
   // TODO: 取得するBudgetデータの指定を動的にする
   const BudgetQuery = gql`
@@ -81,11 +73,11 @@ export const BudgetTable = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>{labels.name}</TableCell>
-                <TableCell>{labels.kind}</TableCell>
-                <TableCell>{labels.account}</TableCell>
-                <TableCell>{labels.amount}</TableCell>
-                <TableCell>{labels.percentage}</TableCell>
+                <TableCell>項目</TableCell>
+                <TableCell>種別</TableCell>
+                <TableCell>銀行口座</TableCell>
+                <TableCell>金額</TableCell>
+                <TableCell>割合</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
