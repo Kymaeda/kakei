@@ -18,16 +18,15 @@ module Types
     end
 
     field :budget, Types::BudgetType, null: false, description: "予算を取得する" do
-      argument :id, ID, required: true
+      argument :id, ID, required: false, description: "予算ID"
     end
 
-    def budget(id:)
-      Budget.find(id)
-    end
-
-    field :budget_this_month, Types::BudgetType, null: false, description: "今月の予算を取得する"
-    def budget_this_month
-      Budget.find_by!(started_at: Time.current.all_month)
+    def budget(id: nil)
+      if id.present?
+        Budget.find(id)
+      else
+        Budget.find_by!(started_at: Time.current.all_month)
+      end
     end
   end
 end

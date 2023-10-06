@@ -15,7 +15,7 @@ import {
 export const BudgetTable = () => {
   const BudgetQuery = gql`
     query {
-      budgetThisMonth {
+      budget {
         id
         startedAt
         finishedAt
@@ -42,7 +42,7 @@ export const BudgetTable = () => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  const budget: Budget = data.budgetThisMonth;
+  const budget: Budget = data.budget;
 
   return (
     <Grid container spacing={3}>
