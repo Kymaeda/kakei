@@ -3,7 +3,7 @@ import { client } from '../services/graphql';
 import { Layout } from './Layout';
 import { BudgetTable } from './BudgetTable';
 
-export const TopContainer = () => {
+export const TopContainer = (): JSX.Element => {
   return (
     <Provider value={client}>
       <Layout>
