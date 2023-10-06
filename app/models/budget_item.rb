@@ -35,4 +35,20 @@ class BudgetItem < ApplicationRecord
   end
 
   delegate :name, to: :bank_account, prefix: true
+
+  # TODO: enum_helpで、kindの値を日本語に変換する。それができたら、このメソッドは消す
+  def kind_i18n
+    case kind
+    when "fixed"
+      '固定費'
+    when "variables"
+      '変動費'
+    when "investments"
+      '自己投資'
+    when "savings"
+      '貯蓄・投資'
+    else
+      ''
+    end
+  end
 end
