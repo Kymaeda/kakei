@@ -24,5 +24,10 @@ module Types
     def budget(id:)
       Budget.find(id)
     end
+
+    field :budget_this_month, Types::BudgetType, null: false, description: "今月の予算を取得する"
+    def budget_this_month
+      Budget.find_by!(started_at: Time.current.all_month)
+    end
   end
 end
