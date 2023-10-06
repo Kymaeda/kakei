@@ -13,10 +13,9 @@ import {
 } from '@mui/material';
 
 export const BudgetTable = () => {
-  // TODO: 取得するBudgetデータの指定を動的にする
   const BudgetQuery = gql`
     query {
-      budget(id: 1) {
+      budget {
         id
         startedAt
         finishedAt
