@@ -13,10 +13,9 @@ import {
 } from '@mui/material';
 
 export const BudgetTable = () => {
-  // TODO: 取得するBudgetデータの指定を動的にする
   const BudgetQuery = gql`
     query {
-      budget(id: 1) {
+      budgetThisMonth {
         id
         startedAt
         finishedAt
@@ -43,7 +42,7 @@ export const BudgetTable = () => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  const budget: Budget = data.budget;
+  const budget: Budget = data.budgetThisMonth;
 
   return (
     <Grid container spacing={3}>
