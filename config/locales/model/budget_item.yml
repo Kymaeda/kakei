@@ -1,0 +1,8 @@
+ja:
+  enums:
+    budget_item:
+      kind:
+        fixed: 固定費
+        variables: 変動費
+        investments: 自己投資
+        savings: 貯蓄・投資
