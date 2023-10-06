@@ -41,5 +41,5 @@ BudgetItem.seed(
   # -- 貯蓄・投資
   { id: 30, kind: :savings, name: '特別費積立', amount: 60_000, budget_id: 2, bank_account_id: 3 },
   { id: 31, kind: :savings, name: '株式投資', amount: 30_000, budget_id: 2, bank_account_id: 3 },
-  { id: 32, kind: :savings, name: '貯蓄', amount: 50_000, budget_id: 2, bank_account_id: 3 },
+  { id: 32, kind: :savings, name: '貯蓄', amount: 50_000, budget_id: 2, bank_account_id: 3 }
 )
