@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   AppBar,
@@ -9,7 +8,7 @@ import {
 } from '@mui/material';
 
 // TODO: anyをやめる
-export const Layout = (props: any) => {
+export const Layout = (props: any): JSX.Element => {
   const { children } = props
 
   return (

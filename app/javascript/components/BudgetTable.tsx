@@ -1,6 +1,6 @@
 import { gql, useQuery } from 'urql';
 import { calcPercentage } from '../services/budget';
-import { Budget } from '../types/budget';
+import type { Budget } from "../types/budget";
 import {
   TableContainer,
   Table,
@@ -12,7 +12,7 @@ import {
   Grid,
 } from '@mui/material';
 
-export const BudgetTable = () => {
+export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
     query {
       budget {
@@ -34,7 +34,7 @@ export const BudgetTable = () => {
     }
   `;
 
-  const [result, reexecuteQuery] = useQuery({
+  const [result] = useQuery({
     query: BudgetQuery,
   });
   const { data, fetching, error } = result;
