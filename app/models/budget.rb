@@ -10,8 +10,8 @@
 #  updated_at  :datetime         not null
 #
 class Budget < ApplicationRecord
-  has_many :budget_items
-  has_many :reserved_items
+  has_many :budget_items, dependent: :destroy
+  has_many :reserved_items, dependent: :destroy
 
   validates :started_at, presence: true
   validates :finished_at, presence: true
