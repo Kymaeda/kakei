@@ -10,7 +10,8 @@
 #
 # Indexes
 #
-#  index_bank_sub_accounts_on_bank_account_id  (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id           (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id_and_name  (bank_account_id,name) UNIQUE
 #
 # Foreign Keys
 #
@@ -18,14 +19,14 @@
 #
 require 'rails_helper'
 
-RSpec.describe BankSubAccount, type: :model do
+RSpec.describe BankSubAccount do
   describe 'Validations' do
     it '名前が設定されている場合、trueを返すこと' do
       expect(build(:bank_sub_account)).to be_valid
     end
 
     it '名前が設定されていない場合、falseを返すこと' do
-      expect(build(:bank_sub_account, name: nil)).to be_invalid
+      expect(build(:bank_sub_account, name: nil)).not_to be_valid
     end
   end
 end

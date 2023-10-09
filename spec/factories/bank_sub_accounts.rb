@@ -10,7 +10,8 @@
 #
 # Indexes
 #
-#  index_bank_sub_accounts_on_bank_account_id  (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id           (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id_and_name  (bank_account_id,name) UNIQUE
 #
 # Foreign Keys
 #
@@ -19,6 +20,6 @@
 FactoryBot.define do
   factory :bank_sub_account do
     sequence(:name) { |n| "目的別口座#{n}" }
-    association :bank_account, factory: :bank_account
+    bank_account factory: %i[bank_account]
   end
 end

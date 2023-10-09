@@ -23,7 +23,7 @@
 #
 require 'rails_helper'
 
-RSpec.describe BudgetItem, type: :model do
+RSpec.describe BudgetItem do
   describe 'Validations' do
     it '必須カラムに値が設定されている場合、trueを返すこと' do
       item = build(:budget_item, name: 'test', kind: :fixed, amount: 1000)
@@ -32,7 +32,7 @@ RSpec.describe BudgetItem, type: :model do
 
     it '必須カラムに値が設定されていない場合、falseを返すこと' do
       item = build(:budget_item, name: nil, kind: nil, amount: nil)
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
   end
 end

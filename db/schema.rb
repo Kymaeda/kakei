@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_24_031345) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_08_235937) do
   create_table "bank_accounts", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_bank_accounts_on_name", unique: true
   end
 
   create_table "bank_sub_accounts", charset: "utf8mb4", force: :cascade do |t|
@@ -22,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_24_031345) do
     t.bigint "bank_account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["bank_account_id", "name"], name: "index_bank_sub_accounts_on_bank_account_id_and_name", unique: true
     t.index ["bank_account_id"], name: "index_bank_sub_accounts_on_bank_account_id"
   end
 

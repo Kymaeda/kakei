@@ -7,6 +7,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_bank_accounts_on_name  (name) UNIQUE
+#
 class BankAccount < ApplicationRecord
   has_many :bank_sub_accounts, dependent: :destroy
 

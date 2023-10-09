@@ -29,7 +29,7 @@ FactoryBot.define do
     annual_counts { 2 }
     note { "MyText" }
 
-    association :bank_sub_account, factory: :bank_sub_account
-    association :budget, factory: :budget
+    bank_sub_account factory: %i[bank_sub_account]
+    budget factory: %i[budget]
   end
 end

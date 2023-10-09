@@ -24,7 +24,7 @@
 #
 require 'rails_helper'
 
-RSpec.describe ReservedItem, type: :model do
+RSpec.describe ReservedItem do
   describe 'Validations' do
     it '必須カラムに値が設定されている場合、trueを返すこと' do
       item = build(:reserved_item, name: 'test', unit_cost: 1000, annual_counts: 3)
@@ -33,7 +33,7 @@ RSpec.describe ReservedItem, type: :model do
 
     it '必須カラムに値が設定されていない場合、falseを返すこと' do
       item = build(:reserved_item, name: nil, unit_cost: nil, annual_counts: nil)
-      expect(item).to be_invalid
+      expect(item).not_to be_valid
     end
   end
 
