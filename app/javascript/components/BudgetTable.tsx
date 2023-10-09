@@ -1,6 +1,7 @@
 import { gql, useQuery } from 'urql';
-import { calcPercentage } from '../services/budget';
+import { calcPercentage } from "../services/budget";
 import type { Budget } from "../types/budget";
+import { BudgetPieChart } from "./BudgetPieChart";
 import {
   TableContainer,
   Table,
@@ -80,7 +81,7 @@ export const BudgetTable = (): JSX.Element => {
         </TableContainer>
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
-        {/* ここに円グラフを入れる予定 */}
+        <BudgetPieChart budget={budget} />
       </Grid>
     </Grid>
   );

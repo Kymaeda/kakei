@@ -8,6 +8,7 @@ export const TopContainer = (): JSX.Element => {
     <Provider value={client}>
       <Layout>
         {/* TODO: Suspenseする */}
+        {/* TODO: テーブルとチャートが含まれるコンポーネントなので、名称を変更する */}
         <BudgetTable />
       </Layout>
     </Provider>
