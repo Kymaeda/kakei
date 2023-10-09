@@ -11,6 +11,8 @@ import {
   Paper,
   Grid,
 } from '@mui/material';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
 
 export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
@@ -43,6 +45,30 @@ export const BudgetTable = (): JSX.Element => {
   if (error) return <p>Oh no... {error.message}</p>;
 
   const budget: Budget = data.budget;
+
+  ChartJS.register(ArcElement, Tooltip, Legend);
+  const chartData = {
+    labels: ["固定費", "変動費", "自己投資", "貯蓄・投資"],
+    datasets: [
+      {
+        label: "%",
+        data: [12, 19, 3, 5],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <Grid container spacing={3}>
@@ -80,7 +106,7 @@ export const BudgetTable = (): JSX.Element => {
         </TableContainer>
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
-        {/* ここに円グラフを入れる予定 */}
+        <Pie data={chartData} />
       </Grid>
     </Grid>
   );
