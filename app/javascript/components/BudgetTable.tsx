@@ -46,13 +46,23 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
+  // TODO: serviceに切り出す
+  type SumByKind = Record<string, number>;
+  const sumByKind = budget.budgetItems.reduce<SumByKind>((sum, item) => {
+    sum[item.kind]
+      ? (sum[item.kind] += item.amount)
+      : (sum[item.kind] = item.amount);
+    return sum;
+  }, {});
+  console.log(sumByKind);
+
   ChartJS.register(ArcElement, Tooltip, Legend);
   const chartData = {
-    labels: ["固定費", "変動費", "自己投資", "貯蓄・投資"],
+    labels: Object.keys(sumByKind),
     datasets: [
       {
-        label: "%",
-        data: [12, 19, 3, 5],
+        label: "円",
+        data: Object.values(sumByKind),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
