@@ -1,5 +1,5 @@
 import { gql, useQuery } from 'urql';
-import { calcPercentage } from '../services/budget';
+import { calcPercentage, sumAmountByKind } from "../services/budget";
 import type { Budget } from "../types/budget";
 import {
   TableContainer,
@@ -46,23 +46,15 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
-  // TODO: serviceに切り出す
-  type SumByKind = Record<string, number>;
-  const sumByKind = budget.budgetItems.reduce<SumByKind>((sum, item) => {
-    sum[item.kind]
-      ? (sum[item.kind] += item.amount)
-      : (sum[item.kind] = item.amount);
-    return sum;
-  }, {});
-  console.log(sumByKind);
+  const sumAmountForChart = sumAmountByKind(budget.budgetItems);
 
   ChartJS.register(ArcElement, Tooltip, Legend);
   const chartData = {
-    labels: Object.keys(sumByKind),
+    labels: Object.keys(sumAmountForChart),
     datasets: [
       {
         label: "円",
-        data: Object.values(sumByKind),
+        data: Object.values(sumAmountForChart),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
