@@ -12,7 +12,7 @@ AllCops:
   Exclude:
     - 'db/**/*'
     - 'config/**/*'
-    - vendor/**/*.rb # or vendor/bundle/**/*
+    - vendor/bundle/**/*
 
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
