@@ -26,8 +26,8 @@ FactoryBot.define do
     sequence(:name) { |n| "予算アイテム#{n}" }
     kind { %i(fixed variables investments savings).sample }
     amount { 1000 }
-    association :bank_account, factory: :bank_account
-    association :budget, factory: :budget
+    bank_account factory: %i[bank_account]
+    budget factory: %i[budget]
   end
 
   trait :fixed do

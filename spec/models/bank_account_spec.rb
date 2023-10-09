@@ -13,14 +13,14 @@
 #
 require 'rails_helper'
 
-RSpec.describe BankAccount, type: :model do
+RSpec.describe BankAccount do
   describe 'Validations' do
     it '名前が設定されている場合、trueを返すこと' do
       expect(build(:bank_account)).to be_valid
     end
 
     it '名前が設定されていない場合、falseを返すこと' do
-      expect(build(:bank_account, name: nil)).to be_invalid
+      expect(build(:bank_account, name: nil)).not_to be_valid
     end
   end
 end

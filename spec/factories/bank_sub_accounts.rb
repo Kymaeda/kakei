@@ -20,6 +20,6 @@
 FactoryBot.define do
   factory :bank_sub_account do
     sequence(:name) { |n| "目的別口座#{n}" }
-    association :bank_account, factory: :bank_account
+    bank_account factory: %i[bank_account]
   end
 end
