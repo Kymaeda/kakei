@@ -57,22 +57,9 @@ export const BudgetTable = (): JSX.Element => {
     labels: [...sumAmountForChart.keys()],
     datasets: [
       {
-        label: "円",
+        label: "%",
         data: [...sumAmountForChart.values()],
-        // TODO: 色を変える
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-        ],
-        borderWidth: 1,
+        backgroundColor: ["#e6b8af", "#d9ead3", "#c9daf8", "#d9d2e9"],
       },
     ],
   };
