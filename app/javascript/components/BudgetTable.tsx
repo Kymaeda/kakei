@@ -48,13 +48,15 @@ export const BudgetTable = (): JSX.Element => {
 
   const sumAmountForChart = sumAmountByKind(budget.budgetItems);
 
+  // TODO: コンポーネントに切り出す？
   ChartJS.register(ArcElement, Tooltip, Legend);
   const chartData = {
-    labels: Object.keys(sumAmountForChart),
+    labels: [...sumAmountForChart.keys()],
     datasets: [
       {
         label: "円",
-        data: Object.values(sumAmountForChart),
+        data: [...sumAmountForChart.values()],
+        // TODO: 色を変える
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",

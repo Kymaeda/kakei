@@ -9,13 +9,11 @@ export const calcPercentage = (
   return Math.floor(parts * floorSize * 10) / (floorSize * 10);
 };
 
-type SumByKind = Record<string, number>;
-export const sumAmountByKind = (budgetItems: BudgetItem[]): SumByKind => {
-  const result = budgetItems.reduce<SumByKind>((sum, item) => {
-    sum[item.kind]
-      ? (sum[item.kind] += item.amount)
-      : (sum[item.kind] = item.amount);
-    return sum;
-  }, {});
-  return result;
-}
+export const sumAmountByKind = (budgetItems: BudgetItem[]): Map<string, number> => {
+  const map = new Map<string, number>();
+  budgetItems.forEach((item) => {
+    const amount = map.get(item.kind) ?? 0;
+    map.set(item.kind, amount + item.amount);
+  });
+  return map;
+};
