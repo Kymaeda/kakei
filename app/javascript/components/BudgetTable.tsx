@@ -46,7 +46,10 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
-  const sumAmountForChart = sumAmountByKind(budget.amount, budget.budgetItems);
+  const sumAmountForChart = sumAmountByKind({
+    budgetAmount: budget.amount,
+    budgetItems: budget.budgetItems,
+  });
 
   // TODO: コンポーネントに切り出す？
   ChartJS.register(ArcElement, Tooltip, Legend);
