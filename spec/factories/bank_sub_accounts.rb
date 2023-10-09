@@ -10,7 +10,8 @@
 #
 # Indexes
 #
-#  index_bank_sub_accounts_on_bank_account_id  (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id           (bank_account_id)
+#  index_bank_sub_accounts_on_bank_account_id_and_name  (bank_account_id,name) UNIQUE
 #
 # Foreign Keys
 #
