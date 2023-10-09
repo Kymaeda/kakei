@@ -10,7 +10,7 @@ AllCops:
   TargetRubyVersion: 3.1.1
   NewCops: enable
   Exclude:
-    - 'db/schema.rb'
+    - 'db/**/*'
     - 'config/**/*'
     - vendor/**/*.rb # or vendor/bundle/**/*
 
