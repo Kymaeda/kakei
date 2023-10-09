@@ -7,8 +7,10 @@
 # versions of RuboCop, may require this file to be generated again.
 
 AllCops:
+  NewCops: enable
   Exclude:
     - 'db/schema.rb'
+    - 'config/**/*'
 
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
