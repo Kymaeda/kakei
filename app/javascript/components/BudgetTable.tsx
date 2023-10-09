@@ -1,6 +1,7 @@
 import { gql, useQuery } from 'urql';
-import { calcPercentage, sumAmountByKind } from "../services/budget";
+import { calcPercentage } from "../services/budget";
 import type { Budget } from "../types/budget";
+import { BudgetPieChart } from "./BudgetPieChart";
 import {
   TableContainer,
   Table,
@@ -11,8 +12,6 @@ import {
   Paper,
   Grid,
 } from '@mui/material';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
 
 export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
@@ -45,24 +44,6 @@ export const BudgetTable = (): JSX.Element => {
   if (error) return <p>Oh no... {error.message}</p>;
 
   const budget: Budget = data.budget;
-
-  const sumAmountForChart = sumAmountByKind({
-    budgetAmount: budget.amount,
-    budgetItems: budget.budgetItems,
-  });
-
-  // TODO: コンポーネントに切り出す？
-  ChartJS.register(ArcElement, Tooltip, Legend);
-  const chartData = {
-    labels: [...sumAmountForChart.keys()],
-    datasets: [
-      {
-        label: "%",
-        data: [...sumAmountForChart.values()],
-        backgroundColor: ["#e6b8af", "#d9ead3", "#c9daf8", "#d9d2e9"],
-      },
-    ],
-  };
 
   return (
     <Grid container spacing={3}>
@@ -100,7 +81,7 @@ export const BudgetTable = (): JSX.Element => {
         </TableContainer>
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
-        <Pie data={chartData} />
+        <BudgetPieChart budget={budget} />
       </Grid>
     </Grid>
   );
