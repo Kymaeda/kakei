@@ -10,6 +10,9 @@ import {
   TableRow,
   Paper,
   Grid,
+  Card,
+  CardContent,
+  Typography
 } from '@mui/material';
 
 export const BudgetTable = (): JSX.Element => {
@@ -51,7 +54,7 @@ export const BudgetTable = (): JSX.Element => {
       <Grid item xs={12} md={8} lg={9}>
         <TableContainer
           component={Paper}
-          sx={{ m: 5 }}
+          // sx={{ m: 5 }}
           aria-label="simple table"
         >
           <Table>
@@ -79,7 +82,17 @@ export const BudgetTable = (): JSX.Element => {
         </TableContainer>
       </Grid>
       <Grid item xs={12} md={4} lg={3}>
-        <BudgetPieChart budget={budget} />
+        <Card>
+          <CardContent>
+            <Typography variant="h5" component="div">
+              種別ごとの割合
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              各種別が、25%になるバランスが理想です。
+            </Typography>
+            <BudgetPieChart budget={budget} />
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
