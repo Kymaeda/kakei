@@ -85,8 +85,8 @@ export const BudgetTable = (): JSX.Element => {
                 <TableCell>項目</TableCell>
                 <TableCell>種別</TableCell>
                 <TableCell>銀行口座</TableCell>
-                <TableCell>金額</TableCell>
-                <TableCell>割合</TableCell>
+                <TableCell align="right">金額</TableCell>
+                <TableCell align="right">割合</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -95,14 +95,16 @@ export const BudgetTable = (): JSX.Element => {
                   <TableCell>{budgetItem.name}</TableCell>
                   <TableCell>{budgetItem.kind}</TableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
-                  <TableCell>{budgetItem.amount}</TableCell>
-                  <TableCell>{budgetItem.percentage}%</TableCell>
+                  <TableCell align="right">
+                    {budgetItem.amount.toLocaleString()}
+                  </TableCell>
+                  <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </STableRow>
               ))}
               <TableRow>
                 <TableCell colSpan={3}>合計</TableCell>
-                <TableCell>{budget.amount}</TableCell>
-                <TableCell>100%</TableCell>
+                <TableCell align="right">{budget.amount.toLocaleString()}</TableCell>
+                <TableCell align="right">100%</TableCell>
               </TableRow>
             </TableBody>
           </Table>
