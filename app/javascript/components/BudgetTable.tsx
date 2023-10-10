@@ -99,6 +99,11 @@ export const BudgetTable = (): JSX.Element => {
                   <TableCell>{budgetItem.percentage}%</TableCell>
                 </STableRow>
               ))}
+              <TableRow>
+                <TableCell colSpan={3}>合計</TableCell>
+                <TableCell>{budget.amount}</TableCell>
+                <TableCell>100%</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
