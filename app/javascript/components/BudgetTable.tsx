@@ -49,9 +49,6 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
-  interface STableRowProps {
-    kind: string;
-  }
   // TODO: マルチバイトで比較するのってどうなのだろうか。enumの値を渡した方が良い？？
   // TODO: カラーコードを外部ファイルにまとめて、共通利用する
   const backgroundColorForKind = (kind: string): string => {
@@ -68,7 +65,12 @@ export const BudgetTable = (): JSX.Element => {
         return "#ffffff";
     }
   };
-  const STableRow = styled(TableRow)<STableRowProps>(({ kind }) => {
+  interface SColoredTableCellProps {
+    kind: string;
+  }
+  const SColoredTableCell = styled(TableCell)<SColoredTableCellProps>(({
+    kind,
+  }) => {
     return {
       backgroundColor: backgroundColorForKind(kind),
     };
@@ -91,19 +93,23 @@ export const BudgetTable = (): JSX.Element => {
             </TableHead>
             <TableBody>
               {budget.budgetItems.map((budgetItem) => (
-                <STableRow key={budgetItem.id} kind={budgetItem.kind}>
+                <TableRow key={budgetItem.id}>
                   <TableCell>{budgetItem.name}</TableCell>
-                  <TableCell>{budgetItem.kind}</TableCell>
+                  <SColoredTableCell kind={budgetItem.kind}>
+                    {budgetItem.kind}
+                  </SColoredTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell align="right">
                     {budgetItem.amount.toLocaleString()}
                   </TableCell>
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
-                </STableRow>
+                </TableRow>
               ))}
               <TableRow>
                 <TableCell colSpan={3}>合計</TableCell>
-                <TableCell align="right">{budget.amount.toLocaleString()}</TableCell>
+                <TableCell align="right">
+                  {budget.amount.toLocaleString()}
+                </TableCell>
                 <TableCell align="right">100%</TableCell>
               </TableRow>
             </TableBody>
