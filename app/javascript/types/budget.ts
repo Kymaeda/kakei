@@ -12,6 +12,7 @@ interface BudgetItem {
   kind: string;
   account: string;
   amount: number;
+  percentage: number;
   bankAccount: BankAccount;
 }
 

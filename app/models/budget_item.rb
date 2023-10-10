@@ -22,6 +22,7 @@
 #  fk_rails_...  (budget_id => budgets.id)
 #
 class BudgetItem < ApplicationRecord
+  # TODO: bank_sub_accountにも紐付ける
   belongs_to :bank_account
   belongs_to :budget
 
@@ -35,4 +36,10 @@ class BudgetItem < ApplicationRecord
   end
 
   delegate :name, to: :bank_account, prefix: true
+
+  # @return [Float] 予算金額に対する割合を、指定したfloor_size(小数第何位)で切り捨てた浮動小数
+  def percentage(floor_size: 1)
+    parts = (amount / budget.amount.to_f) * 100
+    (parts * 10 * floor_size).floor / (10 * floor_size).to_f
+  end
 end

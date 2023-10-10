@@ -1,5 +1,4 @@
 import { gql, useQuery } from 'urql';
-import { calcPercentage } from "../services/budget";
 import type { Budget } from "../types/budget";
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
@@ -26,6 +25,7 @@ export const BudgetTable = (): JSX.Element => {
           name
           kind
           amount
+          percentage
           bankAccount {
             id
             name
@@ -71,9 +71,7 @@ export const BudgetTable = (): JSX.Element => {
                   <TableCell>{budgetItem.kind}</TableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell>{budgetItem.amount}</TableCell>
-                  <TableCell>
-                    {calcPercentage(budget.amount, budgetItem.amount)}%
-                  </TableCell>
+                  <TableCell>{budgetItem.percentage}%</TableCell>
                 </TableRow>
               ))}
             </TableBody>
