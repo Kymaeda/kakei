@@ -14,6 +14,7 @@ import {
   CardContent,
   Typography
 } from '@mui/material';
+import { styled } from "@mui/material/styles";
 
 export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
@@ -48,15 +49,36 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
+  interface STableRowProps {
+    kind: string;
+  }
+  // TODO: マルチバイトで比較するのってどうなのだろうか。enumの値を渡した方が良い？？
+  // TODO: カラーコードを外部ファイルにまとめて、共通利用する
+  const backgroundColorForKind = (kind: string): string => {
+    switch (kind) {
+      case "固定費":
+        return "#e6b8af";
+      case "変動費":
+        return "#d9ead3";
+      case "自己投資":
+        return "#c9daf8";
+      case "貯蓄・投資":
+        return "#d9d2e9";
+      default:
+        return "#ffffff";
+    }
+  };
+  const STableRow = styled(TableRow)<STableRowProps>(({ kind }) => {
+    return {
+      backgroundColor: backgroundColorForKind(kind),
+    };
+  });
+
   return (
     <Grid container spacing={3}>
       {/* Budget Detail Table */}
       <Grid item xs={12} md={8} lg={9}>
-        <TableContainer
-          component={Paper}
-          // sx={{ m: 5 }}
-          aria-label="simple table"
-        >
+        <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
               <TableRow>
@@ -69,13 +91,13 @@ export const BudgetTable = (): JSX.Element => {
             </TableHead>
             <TableBody>
               {budget.budgetItems.map((budgetItem) => (
-                <TableRow key={budgetItem.id}>
+                <STableRow key={budgetItem.id} kind={budgetItem.kind}>
                   <TableCell>{budgetItem.name}</TableCell>
                   <TableCell>{budgetItem.kind}</TableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell>{budgetItem.amount}</TableCell>
                   <TableCell>{budgetItem.percentage}%</TableCell>
-                </TableRow>
+                </STableRow>
               ))}
             </TableBody>
           </Table>
