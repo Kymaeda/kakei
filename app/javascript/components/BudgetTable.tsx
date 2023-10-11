@@ -83,12 +83,17 @@ export const BudgetTable = (): JSX.Element => {
         <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>項目</TableCell>
-                <TableCell>種別</TableCell>
-                <TableCell>銀行口座</TableCell>
-                <TableCell align="right">金額</TableCell>
-                <TableCell align="right">割合</TableCell>
+              {/* TODO: themeをつけとって適用できないか？ */}
+              <TableRow sx={{ bgcolor: "#0b5394" }}>
+                <TableCell sx={{ color: "#ffffff" }}>項目</TableCell>
+                <TableCell sx={{ color: "#ffffff" }}>種別</TableCell>
+                <TableCell sx={{ color: "#ffffff" }}>銀行口座</TableCell>
+                <TableCell sx={{ color: "#ffffff" }} align="right">
+                  金額
+                </TableCell>
+                <TableCell sx={{ color: "#ffffff" }} align="right">
+                  割合
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -105,12 +110,16 @@ export const BudgetTable = (): JSX.Element => {
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </TableRow>
               ))}
-              <TableRow>
-                <TableCell colSpan={3}>合計</TableCell>
-                <TableCell align="right">
+              <TableRow sx={{ bgcolor: "#0b5394" }}>
+                <TableCell sx={{ color: "#ffffff" }} colSpan={3}>
+                  合計
+                </TableCell>
+                <TableCell sx={{ color: "#ffffff" }} align="right">
                   {budget.amount.toLocaleString()}
                 </TableCell>
-                <TableCell align="right">100%</TableCell>
+                <TableCell sx={{ color: "#ffffff" }} align="right">
+                  100%
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
