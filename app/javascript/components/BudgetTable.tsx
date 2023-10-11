@@ -1,5 +1,6 @@
 import { gql, useQuery } from 'urql';
 import type { Budget } from "../types/budget";
+import { colorsForBudgetKind } from '../utils/colors';
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
   TableContainer,
@@ -28,6 +29,7 @@ export const BudgetTable = (): JSX.Element => {
           id
           name
           kind
+          kindText
           amount
           percentage
           bankAccount {
@@ -49,30 +51,11 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
-  // TODO: マルチバイトで比較するのってどうなのだろうか。enumの値を渡した方が良い？？
-  // TODO: カラーコードを外部ファイルにまとめて、共通利用する
-  const backgroundColorForKind = (kind: string): string => {
-    switch (kind) {
-      case "固定費":
-        return "#e6b8af";
-      case "変動費":
-        return "#d9ead3";
-      case "自己投資":
-        return "#c9daf8";
-      case "貯蓄・投資":
-        return "#d9d2e9";
-      default:
-        return "#ffffff";
-    }
-  };
-  interface SColoredTableCellProps {
-    kind: string;
-  }
-  const SColoredTableCell = styled(TableCell)<SColoredTableCellProps>(({
+  const SColoredTableCell = styled(TableCell)<{ kind: string }>(({
     kind,
   }) => {
     return {
-      backgroundColor: backgroundColorForKind(kind),
+      backgroundColor: colorsForBudgetKind[kind],
     };
   });
 
@@ -101,7 +84,7 @@ export const BudgetTable = (): JSX.Element => {
                 <TableRow key={budgetItem.id}>
                   <TableCell>{budgetItem.name}</TableCell>
                   <SColoredTableCell kind={budgetItem.kind}>
-                    {budgetItem.kind}
+                    {budgetItem.kindText}
                   </SColoredTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell align="right">

@@ -20,8 +20,8 @@ export const sumAmountByKind = (options: SumAmountByKindOption): Map<string, num
   const map = new Map<string, number>();
   // 種別ごとに合計金額を算出
   budgetItems.forEach((item) => {
-    const amount = map.get(item.kind) ?? 0;
-    map.set(item.kind, amount + item.amount);
+    const amount = map.get(item.kindText) ?? 0;
+    map.set(item.kindText, amount + item.amount);
   });
 
   // 種別ごとの合計金額を、予算金額に対する割合に変換

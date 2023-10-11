@@ -2,6 +2,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import type { Budget } from "../types/budget";
 import { sumAmountByKind } from "../services/budget";
+import { colorsForBudgetKind } from "../utils/colors";
 
 export const BudgetPieChart = (props: { budget: Budget }): JSX.Element => {
   const { budget } = props;
@@ -18,7 +19,7 @@ export const BudgetPieChart = (props: { budget: Budget }): JSX.Element => {
       {
         label: "%",
         data: [...sumAmount.values()],
-        backgroundColor: ["#e6b8af", "#d9ead3", "#c9daf8", "#d9d2e9"],
+        backgroundColor: Object.values(colorsForBudgetKind),
       },
     ],
   };
