@@ -79,7 +79,7 @@ export const BudgetTable = (): JSX.Element => {
   return (
     <Grid container spacing={3}>
       {/* Budget Detail Table */}
-      <Grid item xs={12} md={8} lg={9}>
+      <Grid item xs={12} md={7} lg={8}>
         <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
@@ -125,7 +125,7 @@ export const BudgetTable = (): JSX.Element => {
           </Table>
         </TableContainer>
       </Grid>
-      <Grid item xs={12} md={4} lg={3}>
+      <Grid item xs={12} md={5} lg={4}>
         <Card>
           <CardContent>
             <Typography variant="h5" component="div">
