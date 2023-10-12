@@ -51,11 +51,22 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
-  const SColoredTableCell = styled(TableCell)<{ kind: string }>(({
+  const SColoredKindTableCell = styled(TableCell)<{ kind: string }>(({
     kind,
   }) => {
     return {
       backgroundColor: colorsForBudgetKind[kind],
+    };
+  });
+
+  const SHeaderTableRow = styled(TableRow)(() => {
+    return {
+      backgroundColor: "#0b5394",
+    };
+  });
+  const SHeaderTableCell = styled(TableCell)(() => {
+    return {
+      color: "#ffffff",
     };
   });
 
@@ -67,25 +78,21 @@ export const BudgetTable = (): JSX.Element => {
           <Table>
             <TableHead>
               {/* TODO: themeをつけとって適用できないか？ */}
-              <TableRow sx={{ bgcolor: "#0b5394" }}>
-                <TableCell sx={{ color: "#ffffff" }}>項目</TableCell>
-                <TableCell sx={{ color: "#ffffff" }}>種別</TableCell>
-                <TableCell sx={{ color: "#ffffff" }}>銀行口座</TableCell>
-                <TableCell sx={{ color: "#ffffff" }} align="right">
-                  金額
-                </TableCell>
-                <TableCell sx={{ color: "#ffffff" }} align="right">
-                  割合
-                </TableCell>
-              </TableRow>
+              <SHeaderTableRow>
+                <SHeaderTableCell>項目</SHeaderTableCell>
+                <SHeaderTableCell>種別</SHeaderTableCell>
+                <SHeaderTableCell>銀行口座</SHeaderTableCell>
+                <SHeaderTableCell align="right">金額</SHeaderTableCell>
+                <SHeaderTableCell align="right">割合</SHeaderTableCell>
+              </SHeaderTableRow>
             </TableHead>
             <TableBody>
               {budget.budgetItems.map((budgetItem) => (
                 <TableRow key={budgetItem.id}>
                   <TableCell>{budgetItem.name}</TableCell>
-                  <SColoredTableCell kind={budgetItem.kind}>
+                  <SColoredKindTableCell kind={budgetItem.kind}>
                     {budgetItem.kindText}
-                  </SColoredTableCell>
+                  </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell align="right">
                     {budgetItem.amount.toLocaleString()}
@@ -93,17 +100,13 @@ export const BudgetTable = (): JSX.Element => {
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </TableRow>
               ))}
-              <TableRow sx={{ bgcolor: "#0b5394" }}>
-                <TableCell sx={{ color: "#ffffff" }} colSpan={3}>
-                  合計
-                </TableCell>
-                <TableCell sx={{ color: "#ffffff" }} align="right">
+              <SHeaderTableRow>
+                <SHeaderTableCell colSpan={3}>合計</SHeaderTableCell>
+                <SHeaderTableCell align="right">
                   {budget.amount.toLocaleString()}
-                </TableCell>
-                <TableCell sx={{ color: "#ffffff" }} align="right">
-                  100%
-                </TableCell>
-              </TableRow>
+                </SHeaderTableCell>
+                <SHeaderTableCell align="right">100%</SHeaderTableCell>
+              </SHeaderTableRow>
             </TableBody>
           </Table>
         </TableContainer>
