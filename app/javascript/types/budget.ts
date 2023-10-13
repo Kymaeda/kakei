@@ -10,8 +10,10 @@ interface BudgetItem {
   id: number;
   name: string;
   kind: string;
+  kindText: string;
   account: string;
   amount: number;
+  percentage: number;
   bankAccount: BankAccount;
 }
 

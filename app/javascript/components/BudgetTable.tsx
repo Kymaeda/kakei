@@ -1,6 +1,6 @@
 import { gql, useQuery } from 'urql';
-import { calcPercentage } from "../services/budget";
 import type { Budget } from "../types/budget";
+import { colorsForBudgetKind } from '../utils/colors';
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
   TableContainer,
@@ -11,7 +11,11 @@ import {
   TableRow,
   Paper,
   Grid,
+  Card,
+  CardContent,
+  Typography
 } from '@mui/material';
+import { styled } from "@mui/material/styles";
 
 export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
@@ -25,7 +29,9 @@ export const BudgetTable = (): JSX.Element => {
           id
           name
           kind
+          kindText
           amount
+          percentage
           bankAccount {
             id
             name
@@ -45,43 +51,78 @@ export const BudgetTable = (): JSX.Element => {
 
   const budget: Budget = data.budget;
 
+  const SColoredKindTableCell = styled(TableCell)<{ kind: string }>(({
+    kind,
+  }) => {
+    return {
+      backgroundColor: colorsForBudgetKind[kind],
+    };
+  });
+
+  const SHeaderTableRow = styled(TableRow)(() => {
+    return {
+      backgroundColor: "#0b5394",
+    };
+  });
+  const SHeaderTableCell = styled(TableCell)(() => {
+    return {
+      color: "#ffffff",
+    };
+  });
+
   return (
     <Grid container spacing={3}>
       {/* Budget Detail Table */}
-      <Grid item xs={12} md={8} lg={9}>
-        <TableContainer
-          component={Paper}
-          sx={{ m: 5 }}
-          aria-label="simple table"
-        >
+      <Grid item xs={12} md={7} lg={8}>
+        <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>項目</TableCell>
-                <TableCell>種別</TableCell>
-                <TableCell>銀行口座</TableCell>
-                <TableCell>金額</TableCell>
-                <TableCell>割合</TableCell>
-              </TableRow>
+              {/* TODO: themeをつけとって適用できないか？ */}
+              <SHeaderTableRow>
+                <SHeaderTableCell>項目</SHeaderTableCell>
+                <SHeaderTableCell>種別</SHeaderTableCell>
+                <SHeaderTableCell>銀行口座</SHeaderTableCell>
+                <SHeaderTableCell align="right">金額</SHeaderTableCell>
+                <SHeaderTableCell align="right">割合</SHeaderTableCell>
+              </SHeaderTableRow>
             </TableHead>
             <TableBody>
               {budget.budgetItems.map((budgetItem) => (
                 <TableRow key={budgetItem.id}>
                   <TableCell>{budgetItem.name}</TableCell>
-                  <TableCell>{budgetItem.kind}</TableCell>
+                  <SColoredKindTableCell kind={budgetItem.kind}>
+                    {budgetItem.kindText}
+                  </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
-                  <TableCell>{budgetItem.amount}</TableCell>
-                  <TableCell>
-                    {calcPercentage(budget.amount, budgetItem.amount)}%
+                  <TableCell align="right">
+                    {budgetItem.amount.toLocaleString()}
                   </TableCell>
+                  <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </TableRow>
               ))}
+              <SHeaderTableRow>
+                <SHeaderTableCell colSpan={3}>合計</SHeaderTableCell>
+                <SHeaderTableCell align="right">
+                  {budget.amount.toLocaleString()}
+                </SHeaderTableCell>
+                <SHeaderTableCell align="right">100%</SHeaderTableCell>
+              </SHeaderTableRow>
             </TableBody>
           </Table>
         </TableContainer>
       </Grid>
-      <Grid item xs={12} md={4} lg={3}>
-        <BudgetPieChart budget={budget} />
+      <Grid item xs={12} md={5} lg={4}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5" component="div">
+              種別ごとの割合
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              各種別が、25%になるバランスが理想です。
+            </Typography>
+            <BudgetPieChart budget={budget} />
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
