@@ -37,6 +37,7 @@ export const Layout = (props: any): JSX.Element => {
             >
               KAKEI
             </Typography>
+            <IconButton color="inherit" href="/budgets" size="small">予算一覧</IconButton>
           </Toolbar>
         </AppBar>
         <Box
