@@ -28,5 +28,13 @@ module Types
         Budget.find_by!(started_at: Time.current.all_month)
       end
     end
+
+    field :budgets, [Types::BudgetType], null: false, description: "予算一覧を取得する" do
+      argument :ids, ID, required: false, description: "予算ID"
+    end
+
+    def budgets
+      Budget.order(started_at: :desc)
+    end
   end
 end
