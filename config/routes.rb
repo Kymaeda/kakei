@@ -3,7 +3,8 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
   post "/graphql", to: "graphql#execute"
-  root 'top#show'
 
+  root 'top#show'
   resource :top, only: %i(show)
+  resources :budgets, only: %i(index show)
 end
