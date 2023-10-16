@@ -1,7 +1,7 @@
 interface Budget {
   id: number;
-  startedAt: Date;
-  finishedAt: Date;
+  startedAt: string;
+  finishedAt: string;
   amount: number;
   budgetItems: BudgetItem[];
 }
