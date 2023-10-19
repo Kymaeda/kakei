@@ -37,6 +37,9 @@ export const BudgetList = (): JSX.Element => {
   const formatDate = (dateString: string): string => {
     return getYearMonth(new Date(dateString));
   };
+  const redirectTo = (id: number): void => {
+    window.location.href = `/budgets/${id}`;
+  };
 
   const SHeaderTableRow = styled(TableRow)(() => {
     return {
@@ -65,7 +68,14 @@ export const BudgetList = (): JSX.Element => {
             <TableBody>
               {budgets.map((budget) => (
                 // TODO: Rowクリックで、詳細ページに遷移させる
-                <TableRow key={budget.id}>
+                <TableRow
+                  key={budget.id}
+                  hover={true}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    redirectTo(budget.id);
+                  }}
+                >
                   <TableCell>{budget.id}</TableCell>
                   <TableCell>{formatDate(budget.startedAt)}</TableCell>
                   <TableCell>{budget.amount.toLocaleString()}</TableCell>
