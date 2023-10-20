@@ -54,7 +54,7 @@ export const BudgetList = (): JSX.Element => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item>
+      <Grid item xs={12} md={12} lg={12}>
         <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
