@@ -6,5 +6,7 @@ module Types
     def test_field
       "Hello World"
     end
+
+    field :dup_budget, mutation: Mutations::DupBudget
   end
 end
