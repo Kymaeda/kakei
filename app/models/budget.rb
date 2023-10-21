@@ -25,6 +25,10 @@ class Budget < ApplicationRecord
     new_budget.assign_attributes(started_at:, finished_at: started_at.end_of_month)
 
     # budget_itemsの複製
+    budget_items_attrs = budget_items.map do |item|
+      item.attributes.slice('kind', 'name', 'amount', 'bank_account_id')
+    end
+    new_budget.budget_items.build(budget_items_attrs)
 
     # TODO: reserved_itemsの複製(まだないので、後で実装する)
 
