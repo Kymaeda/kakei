@@ -1,0 +1,7 @@
+ja:
+  activerecord:
+    attributes:
+      budget:
+        amount: 金額
+        started_at: 開始日
+        finished_at: 終了日
