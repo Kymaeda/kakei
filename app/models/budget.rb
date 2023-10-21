@@ -16,4 +16,18 @@ class Budget < ApplicationRecord
   validates :started_at, presence: true
   validates :finished_at, presence: true
   validates :amount, presence: true
+
+  # @return Budget 複製された予算レコード
+  def dup_with_associations(started_at: nil)
+    new_budget = dup
+
+    started_at ||= Time.current.beginning_of_month
+    new_budget.assign_attributes(started_at:, finished_at: started_at.end_of_month)
+
+    # budget_itemsの複製
+
+    # TODO: reserved_itemsの複製(まだないので、後で実装する)
+
+    new_budget
+  end
 end

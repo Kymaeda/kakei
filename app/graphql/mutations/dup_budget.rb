@@ -10,11 +10,9 @@ class Mutations::DupBudget < Mutations::BaseMutation
   # NOTE: 日時が指定された場合は、その日時を基準にした月の予算を作成する
   def resolve(id:, started_on: nil)
     original_budget = Budget.find(id)
-    new_budget = original_budget.dup
 
     started_at = started_on.present? ? Time.zone.parse(started_on) : Time.current.beginning_of_month
-    new_budget.assign_attributes(started_at:, finished_at: started_at.end_of_month)
-
+    new_budget = original_budget.dup_with_associations(started_at:)
     new_budget.save!
 
     # Successful creation, return the created object with no errors
