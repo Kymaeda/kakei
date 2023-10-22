@@ -6,5 +6,9 @@ Rails.application.routes.draw do
 
   root 'top#show'
   resource :top, only: %i(show)
-  resources :budgets, only: %i(index show)
+  resources :budgets, only: %i(index show edit update) do
+    member do
+      resource :duplicate, only: %i(create), controller: 'budgets/duplicate'
+    end
+  end
 end
