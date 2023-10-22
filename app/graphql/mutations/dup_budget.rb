@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Mutations::DupBudget < Mutations::BaseMutation
   null true
   argument :id, ID, required: true
