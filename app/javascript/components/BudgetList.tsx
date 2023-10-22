@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   Grid,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { getYearMonth } from "../services/date";
@@ -39,6 +40,20 @@ export const BudgetList = (): JSX.Element => {
     return getYearMonth(new Date(dateString));
   };
 
+  const handleRowClick = (budgetId: number): void => {
+    redirectTo(`/budgets/${budgetId}`);
+  };
+  const handleDupClick = (event: any, budgetId: number): void => {
+    event.stopPropagation();
+    // TODO: エンドポイント追加して、`budgets/${budgetId}/duplicate`にリダイレクトする
+    console.log("dup", budgetId);
+  };
+  const handleEditClick = (event: any, budgetId: number): void => {
+    event.stopPropagation();
+    // TODO: エンドポイント追加して、`budgets/${budgetId}/edit`にリダイレクトする
+    redirectTo(`/budgets/${budgetId}/edit`);
+  };
+
   const SHeaderTableRow = styled(TableRow)(() => {
     return {
       backgroundColor: "#0b5394",
@@ -60,25 +75,38 @@ export const BudgetList = (): JSX.Element => {
                 <SHeaderTableCell>ID</SHeaderTableCell>
                 <SHeaderTableCell>期間</SHeaderTableCell>
                 <SHeaderTableCell>予算額</SHeaderTableCell>
-                <SHeaderTableCell></SHeaderTableCell>
+                <SHeaderTableCell />
               </SHeaderTableRow>
             </TableHead>
             <TableBody>
               {budgets.map((budget) => (
-                // TODO: Rowクリックで、詳細ページに遷移させる
                 <TableRow
                   key={budget.id}
                   hover={true}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    redirectTo(`/budgets/${budget.id}`);
+                    handleRowClick(budget.id);
                   }}
                 >
                   <TableCell>{budget.id}</TableCell>
                   <TableCell>{formatDate(budget.startedAt)}</TableCell>
                   <TableCell>{budget.amount.toLocaleString()}</TableCell>
-                  {/* TODO: ボタンにする */}
-                  <TableCell>編集</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={(e) => {
+                        handleEditClick(e, budget.id);
+                      }}
+                    >
+                      編集
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        handleDupClick(e, budget.id);
+                      }}
+                    >
+                      複製
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
               <SHeaderTableRow></SHeaderTableRow>
