@@ -1,4 +1,4 @@
-import { gql, useQuery } from "urql";
+import { gql, useQuery, useMutation } from "urql";
 import type { Budget } from "../types/budget";
 import { redirectTo } from "../utils/url";
 import {
@@ -31,6 +31,18 @@ export const BudgetList = (): JSX.Element => {
   });
   const { data, fetching, error } = result;
 
+  const DuplicateBudgetQuery = gql`
+    mutation {
+      dupBudget(input: { id: $id }) {
+        budget {
+          id
+        }
+        errors
+      }
+    }
+  `;
+  const [dupResponse, executeMutation] = useMutation(DuplicateBudgetQuery);
+
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
@@ -43,10 +55,13 @@ export const BudgetList = (): JSX.Element => {
   const handleRowClick = (budgetId: number): void => {
     redirectTo(`/budgets/${budgetId}`);
   };
-  const handleDupClick = (event: any, budgetId: number): void => {
+  const handleDupClick = async (
+    event: any,
+    budgetId: number,
+  ): Promise<void> => {
     event.stopPropagation();
-    // TODO: エンドポイント追加して、`budgets/${budgetId}/duplicate`にリダイレクトする
-    console.log("dup", budgetId);
+    await executeMutation({ id: budgetId });
+    console.log(dupResponse);
   };
   const handleEditClick = (event: any, budgetId: number): void => {
     event.stopPropagation();
