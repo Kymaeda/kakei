@@ -117,7 +117,7 @@ export const BudgetList = (): JSX.Element => {
                     </Button>
                     <Button
                       onClick={(e) => {
-                        handleDupClick(e, budget.id);
+                        void handleDupClick(e, budget.id);
                       }}
                     >
                       複製
