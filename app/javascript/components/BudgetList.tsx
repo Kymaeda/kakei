@@ -1,5 +1,6 @@
-import { gql, useQuery } from "urql";
+import { gql, useQuery, useMutation } from "urql";
 import type { Budget } from "../types/budget";
+import { redirectTo } from "../utils/url";
 import {
   TableContainer,
   Table,
@@ -9,6 +10,7 @@ import {
   TableRow,
   Paper,
   Grid,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { getYearMonth } from "../services/date";
@@ -29,6 +31,19 @@ export const BudgetList = (): JSX.Element => {
   });
   const { data, fetching, error } = result;
 
+  const DuplicateBudgetQuery = gql`
+    mutation ($id: ID!) {
+      dupBudget(input: { id: $id }) {
+        budget {
+          id
+        }
+        errors
+      }
+    }
+  `;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [dupResponse, executeMutation] = useMutation(DuplicateBudgetQuery);
+
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
@@ -37,8 +52,22 @@ export const BudgetList = (): JSX.Element => {
   const formatDate = (dateString: string): string => {
     return getYearMonth(new Date(dateString));
   };
-  const redirectTo = (id: number): void => {
-    window.location.href = `/budgets/${id}`;
+
+  const handleRowClick = (budgetId: number): void => {
+    redirectTo(`/budgets/${budgetId}`);
+  };
+  const handleDupClick = async (
+    event: any,
+    budgetId: number,
+  ): Promise<void> => {
+    event.stopPropagation();
+    await executeMutation({ id: budgetId }).then((result) => {
+      redirectTo(`/budgets/${result.data.dupBudget.budget.id}`);
+    });
+  };
+  const handleEditClick = (event: any, budgetId: number): void => {
+    event.stopPropagation();
+    redirectTo(`/budgets/${budgetId}/edit`);
   };
 
   const SHeaderTableRow = styled(TableRow)(() => {
@@ -62,25 +91,38 @@ export const BudgetList = (): JSX.Element => {
                 <SHeaderTableCell>ID</SHeaderTableCell>
                 <SHeaderTableCell>期間</SHeaderTableCell>
                 <SHeaderTableCell>予算額</SHeaderTableCell>
-                <SHeaderTableCell></SHeaderTableCell>
+                <SHeaderTableCell />
               </SHeaderTableRow>
             </TableHead>
             <TableBody>
               {budgets.map((budget) => (
-                // TODO: Rowクリックで、詳細ページに遷移させる
                 <TableRow
                   key={budget.id}
                   hover={true}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    redirectTo(budget.id);
+                    handleRowClick(budget.id);
                   }}
                 >
                   <TableCell>{budget.id}</TableCell>
                   <TableCell>{formatDate(budget.startedAt)}</TableCell>
                   <TableCell>{budget.amount.toLocaleString()}</TableCell>
-                  {/* TODO: ボタンにする */}
-                  <TableCell>編集</TableCell>
+                  <TableCell>
+                    <Button
+                      onClick={(e) => {
+                        handleEditClick(e, budget.id);
+                      }}
+                    >
+                      編集
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        void handleDupClick(e, budget.id);
+                      }}
+                    >
+                      複製
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
               <SHeaderTableRow></SHeaderTableRow>
