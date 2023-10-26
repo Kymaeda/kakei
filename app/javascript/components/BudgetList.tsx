@@ -32,7 +32,7 @@ export const BudgetList = (): JSX.Element => {
   const { data, fetching, error } = result;
 
   const DuplicateBudgetQuery = gql`
-    mutation {
+    mutation ($id: ID!) {
       dupBudget(input: { id: $id }) {
         budget {
           id
@@ -41,6 +41,7 @@ export const BudgetList = (): JSX.Element => {
       }
     }
   `;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dupResponse, executeMutation] = useMutation(DuplicateBudgetQuery);
 
   if (fetching) return <p>Loading...</p>;
@@ -60,12 +61,12 @@ export const BudgetList = (): JSX.Element => {
     budgetId: number,
   ): Promise<void> => {
     event.stopPropagation();
-    await executeMutation({ id: budgetId });
-    console.log(dupResponse);
+    await executeMutation({ id: budgetId }).then((result) => {
+      redirectTo(`/budgets/${result.data.dupBudget.budget.id}`);
+    });
   };
   const handleEditClick = (event: any, budgetId: number): void => {
     event.stopPropagation();
-    // TODO: エンドポイント追加して、`budgets/${budgetId}/edit`にリダイレクトする
     redirectTo(`/budgets/${budgetId}/edit`);
   };
 
