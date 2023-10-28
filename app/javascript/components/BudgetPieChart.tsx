@@ -1,15 +1,20 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import type { Budget } from "../types/budget";
+import type { BudgetItem } from "../types/budget";
 import { sumAmountByKind } from "../services/budget";
 import { colorsForBudgetKind } from "../utils/colors";
 
-export const BudgetPieChart = (props: { budget: Budget }): JSX.Element => {
-  const { budget } = props;
+interface BudgetPieChartProps {
+  budgetAmount: number;
+  budgetItems: BudgetItem[];
+}
+
+export const BudgetPieChart = (props: BudgetPieChartProps): JSX.Element => {
+  const { budgetAmount, budgetItems } = props;
 
   const sumAmount = sumAmountByKind({
-    budgetAmount: budget.amount,
-    budgetItems: budget.budgetItems,
+    budgetAmount,
+    budgetItems,
   });
 
   ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,4 +30,4 @@ export const BudgetPieChart = (props: { budget: Budget }): JSX.Element => {
   };
 
   return <Pie data={data} />;
-}
+};

@@ -13,8 +13,9 @@ import {
   Grid,
   Card,
   CardContent,
-  Typography
-} from '@mui/material';
+  Typography,
+  TextField
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const BudgetTable = (): JSX.Element => {
@@ -71,7 +72,7 @@ export const BudgetTable = (): JSX.Element => {
   });
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       {/* Budget Detail Table */}
       <Grid item xs={12} md={7} lg={8}>
         <TableContainer component={Paper} aria-label="simple table">
@@ -89,13 +90,25 @@ export const BudgetTable = (): JSX.Element => {
             <TableBody>
               {budget.budgetItems.map((budgetItem) => (
                 <TableRow key={budgetItem.id}>
-                  <TableCell>{budgetItem.name}</TableCell>
+                  <TableCell>
+                    <TextField
+                      required
+                      defaultValue={budgetItem.name}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </TableCell>
                   <SColoredKindTableCell kind={budgetItem.kind}>
                     {budgetItem.kindText}
                   </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell align="right">
-                    {budgetItem.amount.toLocaleString()}
+                    <TextField
+                      required
+                      defaultValue={budgetItem.amount}
+                      variant="outlined"
+                      size="small"
+                    />
                   </TableCell>
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </TableRow>
@@ -120,7 +133,7 @@ export const BudgetTable = (): JSX.Element => {
             <Typography variant="body2" color="text.secondary">
               各種別が、25%になるバランスが理想です。
             </Typography>
-            <BudgetPieChart budget={budget} />
+            <BudgetPieChart budgetAmount={budget.amount} budgetItems={budget.budgetItems} />
           </CardContent>
         </Card>
       </Grid>
