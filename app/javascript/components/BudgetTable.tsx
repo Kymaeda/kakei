@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { gql, useQuery } from 'urql';
 import type { Budget } from "../types/budget";
 import { colorsForBudgetKind } from '../utils/colors';
@@ -18,6 +19,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+// TODO: 3回呼ばれている(どこかの箇所で再描画が発火している？memoで対応できないか？)
 export const BudgetTable = (): JSX.Element => {
   const BudgetQuery = gql`
     query {
@@ -51,6 +53,8 @@ export const BudgetTable = (): JSX.Element => {
   if (error) return <p>Oh no... {error.message}</p>;
 
   const budget: Budget = data.budget;
+  // TODO: if文の後にhooksをかくとエラーになる。先にsuspense対応して、fetching/errorの条件分岐なくすのが良い？
+  // const [sBudgetItems, setSBudgetItems] = useState(budget.budgetItems);
 
   const SColoredKindTableCell = styled(TableCell)<{ kind: string }>(({
     kind,
@@ -71,6 +75,17 @@ export const BudgetTable = (): JSX.Element => {
     };
   });
 
+  const onChangeName = (event: any, index: number): void => {
+    console.log("originalBudgetItems", budget.budgetItems);
+    // const newBudgetItems = sBudgetItems.map((item, i) => {
+    //   if (i === index) {
+    //     item.name = event.target.value
+    //   }
+    //   return item
+    // })
+    // setSBudgetItems(newBudgetItems)
+  }
+
   return (
     <Grid container spacing={2}>
       {/* Budget Detail Table */}
@@ -88,7 +103,7 @@ export const BudgetTable = (): JSX.Element => {
               </SHeaderTableRow>
             </TableHead>
             <TableBody>
-              {budget.budgetItems.map((budgetItem) => (
+              {budget.budgetItems.map((budgetItem, index) => (
                 <TableRow key={budgetItem.id}>
                   <TableCell>
                     <TextField
@@ -96,6 +111,9 @@ export const BudgetTable = (): JSX.Element => {
                       defaultValue={budgetItem.name}
                       variant="outlined"
                       size="small"
+                      onChange={(event) => {
+                        onChangeName(event, index);
+                      }}
                     />
                   </TableCell>
                   <SColoredKindTableCell kind={budgetItem.kind}>
@@ -133,7 +151,10 @@ export const BudgetTable = (): JSX.Element => {
             <Typography variant="body2" color="text.secondary">
               各種別が、25%になるバランスが理想です。
             </Typography>
-            <BudgetPieChart budgetAmount={budget.amount} budgetItems={budget.budgetItems} />
+            <BudgetPieChart
+              budgetAmount={budget.amount}
+              budgetItems={budget.budgetItems}
+            />
           </CardContent>
         </Card>
       </Grid>
