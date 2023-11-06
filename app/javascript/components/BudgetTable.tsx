@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { gql, useQuery } from 'urql';
-import type { Budget } from "../types/budget";
+import type { Budget, BudgetItem } from "../types/budget";
 import { colorsForBudgetKind } from '../utils/colors';
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
@@ -21,6 +21,9 @@ import { styled } from "@mui/material/styles";
 
 // TODO: 3回呼ばれている(どこかの箇所で再描画が発火している？memoで対応できないか？)
 export const BudgetTable = (): JSX.Element => {
+  const [budget, setBudget] = useState<Budget | null>(null);
+  const [budgetItems, setBudgetItems] = useState<BudgetItem[] | null>(null);
+
   const BudgetQuery = gql`
     query {
       budget {
@@ -52,9 +55,12 @@ export const BudgetTable = (): JSX.Element => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  const budget: Budget = data.budget;
-  // TODO: if文の後にhooksをかくとエラーになる。先にsuspense対応して、fetching/errorの条件分岐なくすのが良い？
-  // const [sBudgetItems, setSBudgetItems] = useState(budget.budgetItems);
+  // TODO: ここでエラーが発生している
+  // application-55e5281532f2c85135dfdcaba426f7d1716cf4113835149837898e6be5748d2a.js:14084 Uncaught Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.
+  setBudget(data.budget);
+  setBudgetItems(data.budget.budgetItems);
+
+  if (!budget || !budgetItems) return <p>no data</p>;
 
   const SColoredKindTableCell = styled(TableCell)<{ kind: string }>(({
     kind,
@@ -76,15 +82,15 @@ export const BudgetTable = (): JSX.Element => {
   });
 
   const onChangeName = (event: any, index: number): void => {
-    console.log("originalBudgetItems", budget.budgetItems);
-    // const newBudgetItems = sBudgetItems.map((item, i) => {
-    //   if (i === index) {
-    //     item.name = event.target.value
-    //   }
-    //   return item
-    // })
-    // setSBudgetItems(newBudgetItems)
-  }
+    console.log("originalBudgetItems", budgetItems);
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        item.name = event.target.value;
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
 
   return (
     <Grid container spacing={2}>
@@ -103,7 +109,7 @@ export const BudgetTable = (): JSX.Element => {
               </SHeaderTableRow>
             </TableHead>
             <TableBody>
-              {budget.budgetItems.map((budgetItem, index) => (
+              {budgetItems.map((budgetItem, index) => (
                 <TableRow key={budgetItem.id}>
                   <TableCell>
                     <TextField
