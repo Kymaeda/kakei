@@ -55,10 +55,12 @@ export const BudgetTable = (): JSX.Element => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  // TODO: ここでエラーが発生している
-  // application-55e5281532f2c85135dfdcaba426f7d1716cf4113835149837898e6be5748d2a.js:14084 Uncaught Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.
-  setBudget(data.budget);
-  setBudgetItems(data.budget.budgetItems);
+  if (!budget) {
+    setBudget(data.budget);
+  }
+  if (!budgetItems) {
+    setBudgetItems(data.budget.budgetItems);
+  }
 
   if (!budget || !budgetItems) return <p>no data</p>;
 
