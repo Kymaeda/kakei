@@ -15,7 +15,7 @@ import {
   Card,
   CardContent,
   Typography,
-  TextField
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -84,10 +84,19 @@ export const BudgetTable = (): JSX.Element => {
   });
 
   const onChangeName = (event: any, index: number): void => {
-    console.log("originalBudgetItems", budgetItems);
     const newBudgetItems = budgetItems.map((item, i) => {
       if (i === index) {
         item.name = event.target.value;
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
+  const onChangeAmount = (event: any, index: number): void => {
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        console.log(parseInt(event.target.value));
+        item.amount = parseInt(event.target.value);
       }
       return item;
     });
@@ -134,6 +143,9 @@ export const BudgetTable = (): JSX.Element => {
                       defaultValue={budgetItem.amount}
                       variant="outlined"
                       size="small"
+                      onChange={(event) => {
+                        onChangeAmount(event, index);
+                      }}
                     />
                   </TableCell>
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
