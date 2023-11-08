@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { gql, useQuery } from 'urql';
-import type { Budget } from "../types/budget";
+import type { Budget, BudgetItem } from "../types/budget";
+import { calcPercentage } from "../services/budget";
 import { colorsForBudgetKind } from '../utils/colors';
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
@@ -13,11 +15,18 @@ import {
   Grid,
   Card,
   CardContent,
-  Typography
-} from '@mui/material';
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+// TODO: 3回呼ばれている(どこかの箇所で再描画が発火している？memoで対応できないか？)
 export const BudgetTable = (): JSX.Element => {
+  const [budget, setBudget] = useState<Budget | null>(null);
+  const [budgetItems, setBudgetItems] = useState<BudgetItem[] | null>(null);
+
   const BudgetQuery = gql`
     query {
       budget {
@@ -49,7 +58,14 @@ export const BudgetTable = (): JSX.Element => {
   if (fetching) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
 
-  const budget: Budget = data.budget;
+  if (!budget) {
+    setBudget(data.budget);
+  }
+  if (!budgetItems) {
+    setBudgetItems(data.budget.budgetItems);
+  }
+
+  if (!budget || !budgetItems) return <p>no data</p>;
 
   const SColoredKindTableCell = styled(TableCell)<{ kind: string }>(({
     kind,
@@ -70,10 +86,42 @@ export const BudgetTable = (): JSX.Element => {
     };
   });
 
+  const onChangeName = (event: any, index: number): void => {
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        item.name = event.target.value;
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
+  const onChangeKind = (event: any, index: number): void => {
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        item.kind = event.target.value;
+        item.kindText = event.target.value;
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
+  const onChangeAmount = (event: any, index: number): void => {
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        console.log(parseInt(event.target.value));
+        item.amount = parseInt(event.target.value);
+        item.percentage = calcPercentage(budget.amount, item.amount);
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       {/* Budget Detail Table */}
       <Grid item xs={12} md={7} lg={8}>
+        {budget.amount.toLocaleString()}円
         <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
@@ -82,20 +130,47 @@ export const BudgetTable = (): JSX.Element => {
                 <SHeaderTableCell>項目</SHeaderTableCell>
                 <SHeaderTableCell>種別</SHeaderTableCell>
                 <SHeaderTableCell>銀行口座</SHeaderTableCell>
-                <SHeaderTableCell align="right">金額</SHeaderTableCell>
+                <SHeaderTableCell>金額</SHeaderTableCell>
                 <SHeaderTableCell align="right">割合</SHeaderTableCell>
               </SHeaderTableRow>
             </TableHead>
             <TableBody>
-              {budget.budgetItems.map((budgetItem) => (
+              {budgetItems.map((budgetItem, index) => (
                 <TableRow key={budgetItem.id}>
-                  <TableCell>{budgetItem.name}</TableCell>
+                  <TableCell>
+                    <TextField
+                      required
+                      defaultValue={budgetItem.name}
+                      variant="outlined"
+                      size="small"
+                      onChange={(event) => {
+                        onChangeName(event, index);
+                      }}
+                    />
+                  </TableCell>
                   <SColoredKindTableCell kind={budgetItem.kind}>
-                    {budgetItem.kindText}
+                    <Select
+                      value={budgetItem.kind}
+                      onChange={(event) => {
+                        onChangeKind(event, index);
+                      }}
+                    >
+                      <MenuItem value={budgetItem.kind}>
+                        {budgetItem.kindText}
+                      </MenuItem>
+                    </Select>
                   </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
-                  <TableCell align="right">
-                    {budgetItem.amount.toLocaleString()}
+                  <TableCell>
+                    <TextField
+                      required
+                      defaultValue={budgetItem.amount}
+                      variant="outlined"
+                      size="small"
+                      onChange={(event) => {
+                        onChangeAmount(event, index);
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="right">{budgetItem.percentage}%</TableCell>
                 </TableRow>
@@ -120,7 +195,10 @@ export const BudgetTable = (): JSX.Element => {
             <Typography variant="body2" color="text.secondary">
               各種別が、25%になるバランスが理想です。
             </Typography>
-            <BudgetPieChart budget={budget} />
+            <BudgetPieChart
+              budgetAmount={budget.amount}
+              budgetItems={budget.budgetItems}
+            />
           </CardContent>
         </Card>
       </Grid>
