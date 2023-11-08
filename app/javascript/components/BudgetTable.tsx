@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { gql, useQuery } from 'urql';
 import type { Budget, BudgetItem } from "../types/budget";
+import { calcPercentage } from "../services/budget";
 import { colorsForBudgetKind } from '../utils/colors';
 import { BudgetPieChart } from "./BudgetPieChart";
 import {
@@ -97,6 +98,7 @@ export const BudgetTable = (): JSX.Element => {
       if (i === index) {
         console.log(parseInt(event.target.value));
         item.amount = parseInt(event.target.value);
+        item.percentage = calcPercentage(budget.amount, item.amount);
       }
       return item;
     });
@@ -107,6 +109,7 @@ export const BudgetTable = (): JSX.Element => {
     <Grid container spacing={2}>
       {/* Budget Detail Table */}
       <Grid item xs={12} md={7} lg={8}>
+        {budget.amount.toLocaleString()}円
         <TableContainer component={Paper} aria-label="simple table">
           <Table>
             <TableHead>
@@ -115,7 +118,7 @@ export const BudgetTable = (): JSX.Element => {
                 <SHeaderTableCell>項目</SHeaderTableCell>
                 <SHeaderTableCell>種別</SHeaderTableCell>
                 <SHeaderTableCell>銀行口座</SHeaderTableCell>
-                <SHeaderTableCell align="right">金額</SHeaderTableCell>
+                <SHeaderTableCell>金額</SHeaderTableCell>
                 <SHeaderTableCell align="right">割合</SHeaderTableCell>
               </SHeaderTableRow>
             </TableHead>
@@ -137,7 +140,7 @@ export const BudgetTable = (): JSX.Element => {
                     {budgetItem.kindText}
                   </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     <TextField
                       required
                       defaultValue={budgetItem.amount}
