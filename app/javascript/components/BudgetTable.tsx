@@ -17,6 +17,8 @@ import {
   CardContent,
   Typography,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -93,6 +95,16 @@ export const BudgetTable = (): JSX.Element => {
     });
     setBudgetItems(newBudgetItems);
   };
+  const onChangeKind = (event: any, index: number): void => {
+    const newBudgetItems = budgetItems.map((item, i) => {
+      if (i === index) {
+        item.kind = event.target.value;
+        item.kindText = event.target.value;
+      }
+      return item;
+    });
+    setBudgetItems(newBudgetItems);
+  };
   const onChangeAmount = (event: any, index: number): void => {
     const newBudgetItems = budgetItems.map((item, i) => {
       if (i === index) {
@@ -137,7 +149,16 @@ export const BudgetTable = (): JSX.Element => {
                     />
                   </TableCell>
                   <SColoredKindTableCell kind={budgetItem.kind}>
-                    {budgetItem.kindText}
+                    <Select
+                      value={budgetItem.kind}
+                      onChange={(event) => {
+                        onChangeKind(event, index);
+                      }}
+                    >
+                      <MenuItem value={budgetItem.kind}>
+                        {budgetItem.kindText}
+                      </MenuItem>
+                    </Select>
                   </SColoredKindTableCell>
                   <TableCell>{budgetItem.bankAccount.name}</TableCell>
                   <TableCell>
